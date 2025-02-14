@@ -34,20 +34,20 @@ public class MovieRepository {
     // 기본 생성자
     public MovieRepository() {
         System.out.println("MovieRepository 생성 테스트 ");
-        
+
         if(!movieFile.exists() && ! scheduleFile.exists()) {
-            System.out.println("파일 생성하러 가기");
+//            System.out.println("파일 생성하러 가기");
             initializeData();
         }
 
-        System.out.println("파일이 이미 존재합니다. ");
+//        System.out.println("파일이 이미 존재합니다. ");
 
         loadMovies();       // 영화 정보 리스트 읽어오기
         loadSchedules();    // 영화 상영 스케줄표 목록 읽어오기
     }
 
     private void initializeData() {
-        System.out.println("initializeData");
+//        System.out.println("initializeData");
         // 영화 목록 파일이 존재하지 않으면 생성됨
         // 🎬 영화 정보 리스트 생성
         List<MovieInfo> defaultMovieList = new ArrayList<>();
@@ -60,18 +60,18 @@ public class MovieRepository {
         defaultMovieList.add(new MovieInfo(6, "하얼빈", 8.09, MovieGenre.HISTORY, MovieGrade.FIFTHTEEN, 114));
         defaultMovieList.add(new MovieInfo(7, "쿠로코의 농구 라스트 게임", 9.48, MovieGenre.ANIMATION, MovieGrade.TWELVE, 91));
 
-        System.out.println("영화 리스트 생성: " + defaultMovieList);
+//        System.out.println("영화 리스트 생성: " + defaultMovieList);
 
         movieList.addAll(defaultMovieList);
 
         // 파일에 작성
         saveMovieList(defaultMovieList);
 
-        System.out.println("영화 상영 스케줄표를 만들어 보자.");
+//        System.out.println("영화 상영 스케줄표를 만들어 보자.");
         // 영화 상영 스케줄표가 존재하지 않으면 생성됨
         // 🎥 상영 스케줄 리스트 생성 (2025년 12월 12일 ~ 12월 19일 범위)
         List<MovieSchedule> defaultScheduleList = new ArrayList<>();
-        System.out.println("defaultScheduleList : " + defaultScheduleList);
+//        System.out.println("defaultScheduleList : " + defaultScheduleList);
 
 
         defaultScheduleList.add(new MovieSchedule(movieList.get(1), 1, Theater.GANGNAM, LocalDate.of(2025, 02, 12), LocalTime.of(10, 0), 60, ScreenType.TWOD));
@@ -95,18 +95,14 @@ public class MovieRepository {
         defaultScheduleList.add(new MovieSchedule(movieList.get(5), 19, Theater.GANGNAM, LocalDate.of(2025, 02, 19), LocalTime.of(18, 0), 45, ScreenType.TWOD));
         defaultScheduleList.add(new MovieSchedule(movieList.get(1), 20, Theater.KONKKUK, LocalDate.of(2025, 02, 19), LocalTime.of(21, 0), 35, ScreenType.TWOD));
 
-        System.out.println("스케줄표: " + defaultScheduleList);
         // 파일에 작성
         saveMovieSchedule(defaultScheduleList);
     }
 
     // 영화 정보 목록을 파일로 덮어 씌우는 메서드
     private void saveMovieList(List<MovieInfo> defaultMovieList) {
-        System.out.println("saveMovieList");
 
         ObjectOutputStream oos = null;
-
-        System.out.println("여기는0");  // OK
 
         try{
             oos = new ObjectOutputStream(
@@ -114,11 +110,9 @@ public class MovieRepository {
                             new FileOutputStream((movieFile))
                     )
             );
-            System.out.println("여기는1");
             for(MovieInfo m : defaultMovieList){
                 oos.writeObject(m);
             }
-            System.out.println("여기는?");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -134,7 +128,6 @@ public class MovieRepository {
 
     // 영화 상영 스케줄을 파일로 덮어 씌우는 메서드
     private void saveMovieSchedule(List<MovieSchedule> defaultScheduleList) {
-        System.out.println("saveMovieSchedule");
         ObjectOutputStream oos = null;
         try{
             oos = new ObjectOutputStream(
@@ -142,11 +135,10 @@ public class MovieRepository {
                             new FileOutputStream((scheduleFile))
                     )
             );
-            System.out.println("saveMovieSchedule write Object");
+
             for(MovieSchedule s : defaultScheduleList){
                 oos.writeObject(s);
             }
-            System.out.println("여기???");
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -196,11 +188,9 @@ public class MovieRepository {
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
-
         }catch(EOFException e){
 
-        }
-        catch (IOException e) {
+        }catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -225,7 +215,6 @@ public class MovieRepository {
                 theaterSchedule.add(s);
             }
         }
-
         return theaterSchedule;
     }
 
@@ -235,6 +224,19 @@ public class MovieRepository {
         // 필터링
         for(MovieSchedule s : movieSchedule){
             if(s.getMovieInfo().getMovieNo() == secondFilter){
+                movieinfoSchedule.add(s);
+            }
+        }
+        return movieinfoSchedule;
+    }
+
+    // 날짜별 상영 스케줄 조회
+    public List<MovieSchedule> selectedDateSchedule(LocalDate selectedDate) {
+        List<MovieSchedule> movieinfoSchedule = new ArrayList<>();
+
+        // 필터링
+        for(MovieSchedule s : movieSchedule){
+            if(s.getDate().equals(selectedDate)){
                 movieinfoSchedule.add(s);
             }
         }

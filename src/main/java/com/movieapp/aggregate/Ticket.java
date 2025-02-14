@@ -8,17 +8,11 @@ public class Ticket implements Serializable {
     private SeatColumn seatColumn; // 좌석 열
     private SeatRow seatRow; // 좌석 행
     private int price; // 가격
+    private TicketStatus status;    // 티켓 활성화 여부
 
     public Ticket() {
     }
 
-    public Ticket(int movieNo, int numPeople, SeatColumn seatColumn, SeatRow seatRow, int price) {
-        this.movieNo = movieNo;
-        this.numPeople = numPeople;
-        this.seatColumn = seatColumn;
-        this.seatRow = seatRow;
-        this.price = price;
-    }
 
     public int getMovieNo() {
         return movieNo;
@@ -60,6 +54,14 @@ public class Ticket implements Serializable {
         this.price = price;
     }
 
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -68,6 +70,7 @@ public class Ticket implements Serializable {
                 ", seatColumn=" + seatColumn +
                 ", seatRow=" + seatRow +
                 ", price=" + price +
+                ", status=" + status +
                 '}';
     }
 }
